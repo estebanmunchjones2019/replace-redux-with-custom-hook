@@ -1,15 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import FavoriteItem from '../components/Favorites/FavoriteItem';
 import { useStore } from '../hooks-store/store';
 import './Products.css';
 
 const Favorites = props => {
-  // const state = useStore()[0];
-  //test here
-  const [state, dispatch] = useStore()[0];
-  dispatch('ADD_ORDER', 'new_order');
-  console.log('new_order_state', state.orders)
+  
+  // we're just interested in reading the state, not dispatching and action
+  const state = useStore()[0];
 
   const favoriteProducts = state.products.filter(p => p.isFavorite);
   let content = <p className="placeholder">Got no favorites yet!</p>;

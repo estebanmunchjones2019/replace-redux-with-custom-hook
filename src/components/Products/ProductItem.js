@@ -5,6 +5,8 @@ import { useStore } from '../../hooks-store/store';
 import './ProductItem.css';
 
 const ProductItem = props => {
+
+  // we're just interested in dispatching and action, not in reading the state 
   const dispatch = useStore()[1];
 
   const toggleFavHandler = () => {
