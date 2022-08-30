@@ -1,7 +1,8 @@
 import { initStore } from './store';
 
 const configureStore = () => {
-  //the actions object is just an object with keys that are the identifiers, and then, the value is a function that takes state and a payload.
+  //the actions object is just an object with keys that are the identifiers, and then, the value is a function that takes state and a payload,
+  // and returns the new state. It's a hybrid of a Redux action and reducer
   const actions = {
     TOGGLE_FAV: (curState, productId) => {
       const prodIndex = curState.products.findIndex(p => p.id === productId);
@@ -14,7 +15,7 @@ const configureStore = () => {
       return { products: updatedProducts };
     }
   };
-  //init the store with the actions object and the initial global state
+  //init the store with the actions object and the initial global state for the products slice
   initStore(actions, {
     products: [
       {
