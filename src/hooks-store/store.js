@@ -29,8 +29,6 @@ export const useStore = () => {
   return [globalState, dispatch];
 };
 
-// the initial state for each state slice and actions are set up from individual
-// JS files, so the state con hold multiple slices of data e.g: products, orders, etc
 export const initStore = (userActions, initialState) => {
   if (initialState) {
     globalState = { ...globalState, ...initialState };
