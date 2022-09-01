@@ -27,14 +27,14 @@ export const useStore = () => {
     switch (actionIdentifier) {
       case 'TOGGLE_FAV':
         await fakeFetchCall();
+        dispatch('ADD_ORDER', null)
         break;
     }
-    debugger;
     const newState = actions[actionIdentifier](globalState, payload);
 
     globalState = { ...globalState, ...newState };
-    
 
+    console.log(globalState);
 
     for (const listener of listeners) {
       listener(globalState);

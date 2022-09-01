@@ -14,6 +14,10 @@ const configureStore = () => {
       };
 
       return { products: updatedProducts };
+    },
+    ADD_ORDER: (curState, productId) => {
+      console.log('ADD_ORDER dispatched');
+      return { orders:[...curState.orders, Math.random()] };
     }
   };
 
@@ -43,7 +47,8 @@ const configureStore = () => {
         description: 'Street style! An orange hat.',
         isFavorite: false
       }
-    ]
+    ],
+    orders: []
   });
 };
 
