@@ -16,7 +16,7 @@ export const useStore = () => {
     //switch statement do something with the new or old state?
     // debugger;
     if (sideEffects[actionIdentifier]) {
-      await sideEffects[actionIdentifier](globalState, dispatch);
+      await sideEffects[actionIdentifier](globalState, dispatch, payload);
     }
    ;
   

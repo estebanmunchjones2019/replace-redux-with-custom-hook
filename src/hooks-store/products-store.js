@@ -34,7 +34,7 @@ const configureStore = () => {
 
   const sideEffects = {
    TOGGLE_FAV: async (globalState, dispatch, payload) => {
-        console.log(globalState,'from sideEffect');
+        console.log('TOGGLE_FAV sideEffect', 'globalState: ', globalState,'payload :', payload);
         await fakeFetchCall();
         dispatch('ADD_ORDER', null);
     }
