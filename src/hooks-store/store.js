@@ -6,17 +6,7 @@ let listeners = [];
 
 let actions = {};
 
-// fake async task that takes 3 seconds to resolve
-const fakeFetchCall = (data) => {
-  console.log('start of http call to POST some data');
-  return new Promise((resolve, reject) => {
-    const error = Math.random() > 0.5 ? true : false;
-    setTimeout(() => {
-        console.log('data successfuly posted!')
-        resolve();
-    }, 4000);
-  });
-}
+let sideEffects = {};
 
 export const useStore = () => {
   const setState = useState(globalState)[1];
@@ -24,12 +14,12 @@ export const useStore = () => {
   const dispatch = async (actionIdentifier, payload) => {
      // async actions here:
     //switch statement do something with the new or old state?
-    switch (actionIdentifier) {
-      case 'TOGGLE_FAV':
-        await fakeFetchCall();
-        dispatch('ADD_ORDER', null)
-        break;
+    // debugger;
+    if (sideEffects[actionIdentifier]) {
+      await sideEffects[actionIdentifier](globalState, dispatch);
     }
+   ;
+  
     const newState = actions[actionIdentifier](globalState, payload);
 
     globalState = { ...globalState, ...newState };
@@ -52,9 +42,10 @@ export const useStore = () => {
   return [globalState, dispatch];
 };
 
-export const initStore = (userActions, initialState) => {
+export const initStore = (userActions, userSideEffects, initialState) => {
   if (initialState) {
     globalState = { ...globalState, ...initialState };
   }
   actions = { ...actions, ...userActions };
+  sideEffects = { ...sideEffects, ...userSideEffects}
 };
