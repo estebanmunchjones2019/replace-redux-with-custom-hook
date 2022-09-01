@@ -1,8 +1,20 @@
 import { initStore } from './store';
 
+// fake async task that takes 3 seconds to resolve
+const fakeFetchCall = (data) => {
+  console.log('start of http call to POST some data');
+  return new Promise((resolve, reject) => {
+    const error = Math.random() > 0.5 ? true : false;
+    setTimeout(() => {
+        console.log('data successfuly posted!')
+        resolve();
+    }, 4000);
+  });
+}
+
 const configureStore = () => {
   const actions = {
-    TOGGLE_FAV: (curState, productId) => {
+    TOGGLE_FAV: async (curState, productId) => {
       const prodIndex = curState.products.findIndex(p => p.id === productId);
       const newFavStatus = !curState.products[prodIndex].isFavorite;
       const updatedProducts = [...curState.products];
@@ -10,6 +22,9 @@ const configureStore = () => {
         ...curState.products[prodIndex],
         isFavorite: newFavStatus
       };
+      // doing something async here, e.g POST request to some Microservice, etc
+      await fakeFetchCall();
+
       return { products: updatedProducts };
     }
   };
