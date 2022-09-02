@@ -1,12 +1,12 @@
 import { initStore } from './store';
 
 
-// fake async task that takes 3 seconds to resolve
+// fake async task that takes 4 seconds to resolve
 const fakePostRequest = (productId) => {
-  console.log(`Post request started, with productId : ${productId}`);
+  console.log(`Posting : ${productId} to analytics`);
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-        console.log(`${productId} successfully posted!`)
+        console.log(`${productId} successfully posted to analytics!`)
         resolve();
     }, 4000);
   });
@@ -14,7 +14,7 @@ const fakePostRequest = (productId) => {
 
 const configureStore = () => {
   const actions = {
-    TOGGLE_FAV: (curState, productId) => {
+    TOGGLE_FAV: (curState, dispatch, productId) => {
       const prodIndex = curState.products.findIndex(p => p.id === productId);
       const newFavStatus = !curState.products[prodIndex].isFavorite;
       const updatedProducts = [...curState.products];
@@ -22,10 +22,17 @@ const configureStore = () => {
         ...curState.products[prodIndex],
         isFavorite: newFavStatus
       };
+      // debugger;
+
+      dispatch('POST_TO_ANALYTICS', productId);
 
       return { products: updatedProducts };
     },
-    SET_TOUCHED: (curState, productId) => {
+    // POST_TO_ANALYTICS : (curState, dispatch, productId) => {
+    //   //this action doesn't change the state, but it has a corresponding sideEffect
+    //   return { products: curState.products }
+    // },
+    SET_TOUCHED: (curState, dispatch, productId) => {
       const prodIndex = curState.products.findIndex(p => p.id === productId);
       const updatedProducts = [...curState.products];
       updatedProducts[prodIndex] = {
@@ -33,20 +40,23 @@ const configureStore = () => {
         touched: true
       };
 
+      // debugger;
+
       return { products: updatedProducts };
     }
   };
 
   const sideEffects = {
-   TOGGLE_FAV: async (globalState, dispatch, payload) => {
-        console.log('TOGGLE_FAV sideEffect is running', 'globalState is: ', globalState,'payload is :', payload);
+   POST_TO_ANALYTICS: async (curState, dispatch, payload) => {
+        console.log(`POST_TO_ANALYTICS sideEffect is running for product ${payload} `, 'globalState is: ', curState,'payload is :', payload);
         try {
           // fake call to post data to an Data analytics API
           // this is just an example, you might not do this in real life analytics
           await fakePostRequest(payload);
+          // debugger;
           dispatch('SET_TOUCHED', payload);
         } catch(error) {
-          // don't dispatch the action
+          // analytics post failed, let's not dispatch the action then to mark it as TOUCHED
           return;
         }
     }
