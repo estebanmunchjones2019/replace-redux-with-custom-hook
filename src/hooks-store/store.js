@@ -12,22 +12,18 @@ export const useStore = () => {
   const setState = useState(globalState)[1];
 
   const dispatch = async (actionIdentifier, payload) => {
-     // async actions here:
-    //switch statement do something with the new or old state?
-    // debugger;
     if (sideEffects[actionIdentifier]) {
       await sideEffects[actionIdentifier](globalState, dispatch, payload);
     }
-   ;
   
     const newState = actions[actionIdentifier](globalState, payload);
 
     globalState = { ...globalState, ...newState };
 
-    console.log(globalState);
+    console.log(`after running action: ${actionIdentifier} action`,  'the updated globalState is: ', globalState );
 
     for (const listener of listeners) {
-      listener(globalState);
+      listener(globalState)
     }
   };
 
