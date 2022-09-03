@@ -11,23 +11,12 @@ let sideEffects = {};
 export const useStore = () => {
   const setState = useState(globalState)[1];
 
-  // some indentifiers may have no sideEffects
   const dispatch = async (actionIdentifier, payload) => {
     if (sideEffects[actionIdentifier]) {
       await sideEffects[actionIdentifier](globalState, dispatch, payload);
     }
-  
-    // if (actions[actionIdentifier]) {
-    //   const newState = actions[actionIdentifier](globalState,dispatch, payload);
-    // } else {
-    //   const new
-    // }
-
-    // some indentifiers may have no action
-    // debugger;
     const newState = actions[actionIdentifier] ? actions[actionIdentifier](globalState, dispatch, payload) : { ...globalState };
   
-
     globalState = { ...globalState, ...newState };
 
     console.log(`after running action: ${actionIdentifier} action for ${payload} product`,  'the updated globalState is: ', globalState );

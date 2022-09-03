@@ -4,8 +4,7 @@ import { initStore } from './store';
 // fake async task that takes 4 seconds to resolve
 const fakePostRequest = (payload) => {
   console.log(`Posting : ${payload.productId} to analytics as favouriteL ${payload.newFavStatus}`);
-  // this fakes sending data to an analytics service everytime the button is clicked
-  // we could store in analytics the value of productId & newFavStatus
+  // this fakes sending the value of productId & newFavStatus to an analytics service everytime the button is clicked
   return new Promise((resolve, reject) => {
     setTimeout(() => {
         console.log(`${payload.productId} successfully posted to analytics!`)
@@ -30,21 +29,13 @@ const configureStore = () => {
 
       return { products: updatedProducts };
     },
-    // POST_TO_ANALYTICS : (curState, dispatch, productId) => {
-    //   //this action doesn't change the state, but it has a corresponding sideEffect
-    //   return { products: curState.products }
-    // },
     SET_TIMES_CLICKED: (curState, dispatch, productId) => {
       const prodIndex = curState.products.findIndex(p => p.id === productId);
       const updatedProducts = [...curState.products];
-      // debugger;
       updatedProducts[prodIndex] = {
         ...curState.products[prodIndex],
         timesClicked: curState.products[prodIndex].timesClicked + 1
       };
-
-      // debugger;
-
       return { products: updatedProducts };
     }
   };
