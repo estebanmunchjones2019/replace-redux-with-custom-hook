@@ -2,11 +2,13 @@ import { initStore } from './store';
 
 
 // fake async task that takes 4 seconds to resolve
-const fakePostRequest = (productId) => {
-  console.log(`Posting : ${productId} to analytics`);
+const fakePostRequest = (payload) => {
+  console.log(`Posting : ${payload.productId} to analytics as favouriteL ${payload.newFavStatus}`);
+  // this fakes sending data to an analytics service everytime the button is clicked
+  // we could store in analytics the value of productId & newFavStatus
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-        console.log(`${productId} successfully posted to analytics!`)
+        console.log(`${payload.productId} successfully posted to analytics!`)
         resolve();
     }, 4000);
   });
@@ -24,7 +26,7 @@ const configureStore = () => {
       };
       // debugger;
 
-      dispatch('POST_TO_ANALYTICS', productId);
+      dispatch('POST_TO_ANALYTICS', { productId, newFavStatus });
 
       return { products: updatedProducts };
     },
@@ -32,12 +34,13 @@ const configureStore = () => {
     //   //this action doesn't change the state, but it has a corresponding sideEffect
     //   return { products: curState.products }
     // },
-    SET_TOUCHED: (curState, dispatch, productId) => {
+    SET_TIMES_CLICKED: (curState, dispatch, productId) => {
       const prodIndex = curState.products.findIndex(p => p.id === productId);
       const updatedProducts = [...curState.products];
+      // debugger;
       updatedProducts[prodIndex] = {
         ...curState.products[prodIndex],
-        touched: true
+        timesClicked: curState.products[prodIndex].timesClicked + 1
       };
 
       // debugger;
@@ -54,7 +57,7 @@ const configureStore = () => {
           // this is just an example, you might not do this in real life analytics
           await fakePostRequest(payload);
           // debugger;
-          dispatch('SET_TOUCHED', payload);
+          dispatch('SET_TIMES_CLICKED', payload.productId);
         } catch(error) {
           // analytics post failed, let's not dispatch the action then to mark it as TOUCHED
           return;
@@ -69,28 +72,28 @@ const configureStore = () => {
         title: 'Red Scarf',
         description: 'A pretty red scarf.',
         isFavorite: false,
-        touched: false
+        timesClicked: 0
       },
       {
         id: 'p2',
         title: 'Blue T-Shirt',
         description: 'A pretty blue t-shirt.',
         isFavorite: false,
-        touched: false
+        timesClicked: 0
       },
       {
         id: 'p3',
         title: 'Green Trousers',
         description: 'A pair of lightly green trousers.',
         isFavorite: false,
-        touched: false
+        timesClicked: 0
       },
       {
         id: 'p4',
         title: 'Orange Hat',
         description: 'Street style! An orange hat.',
         isFavorite: false,
-        touched: false
+        timesClicked: 0
       }
     ],
   });
