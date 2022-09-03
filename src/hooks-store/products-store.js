@@ -23,7 +23,6 @@ const configureStore = () => {
         ...curState.products[prodIndex],
         isFavorite: newFavStatus
       };
-      // debugger;
 
       dispatch('POST_TO_ANALYTICS', { productId, newFavStatus });
 
@@ -36,6 +35,7 @@ const configureStore = () => {
         ...curState.products[prodIndex],
         timesClicked: curState.products[prodIndex].timesClicked + 1
       };
+
       return { products: updatedProducts };
     }
   };
@@ -47,10 +47,9 @@ const configureStore = () => {
           // fake call to post data to an Data analytics API
           // this is just an example, you might not do this in real life analytics
           await fakePostRequest(payload);
-          // debugger;
           dispatch('SET_TIMES_CLICKED', payload.productId);
         } catch(error) {
-          // analytics post failed, let's not dispatch the action then to mark it as TOUCHED
+          // analytics post failed, let's not dispatch the action to mark it as clicked
           return;
         }
     }

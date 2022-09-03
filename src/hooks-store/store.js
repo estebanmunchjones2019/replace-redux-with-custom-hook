@@ -15,7 +15,9 @@ export const useStore = () => {
     if (sideEffects[actionIdentifier]) {
       await sideEffects[actionIdentifier](globalState, dispatch, payload);
     }
-    const newState = actions[actionIdentifier] ? actions[actionIdentifier](globalState, dispatch, payload) : { ...globalState };
+    const newState = actions[actionIdentifier] ? 
+      actions[actionIdentifier](globalState, dispatch, payload) : 
+      { ...globalState };
   
     globalState = { ...globalState, ...newState };
 
