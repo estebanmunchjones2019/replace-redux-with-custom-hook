@@ -43,7 +43,7 @@ export const useStore = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  return [state, dispatch];
+  return [globalState, dispatch];
 };
 
 export const initStore = (userActions, initialState) => {

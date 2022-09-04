@@ -8,6 +8,7 @@ const Products = props => {
   
   // we're just interested in reading the state, not dispatching and action
   const state = useStore()[0];
+  // debugger;
   return (
     <ul className="products-list">
       {state.products.map(prod => (

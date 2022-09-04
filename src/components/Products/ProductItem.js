@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useMemo} from 'react';
 
 import Card from '../UI/Card';
-import { useStore } from '../../hooks-store/store';
+import { useStore, } from '../../hooks-store/store';
 import './ProductItem.css';
 
 const ProductItem = props => {
 
   // we're just interested in dispatching and action, not in reading the state 
   const dispatch = useStore()[1];
+
+  // debugger;
 
   const toggleFavHandler = () => {
     // toggleFav(props.id);
