@@ -11,7 +11,7 @@ const ProductItem = props => {
 
   const toggleFavHandler = () => {
     // toggleFav(props.id);
-    dispatch('TOGGLE_FAV', props.id);
+    dispatch({ type: 'TOGGLE_FAV', payload: props.id });
   };
 
   return (

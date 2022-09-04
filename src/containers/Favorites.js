@@ -5,7 +5,7 @@ import { useStore } from '../hooks-store/store';
 import './Products.css';
 
 const Favorites = props => {
-  
+
   // we're just interested in reading the state, not dispatching and action
   const state = useStore()[0];
 

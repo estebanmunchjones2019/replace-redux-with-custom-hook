@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useReducer, useEffect } from 'react';
 
 let globalState = {};
 
@@ -6,27 +6,44 @@ let listeners = [];
 
 let actions = {};
 
-export const useStore = () => {
-  const setState = useState(globalState)[1];
+function globalReducer(state, action) {
+  // debugger;
+  const newState = actions[action.type] ?
+  actions[action.type](globalState, action.payload) :
+  {...globalState}
+  
+  globalState = {...globalState, ...newState};
 
-  const dispatch = (actionIdentifier, payload) => {
-    const newState = actions[actionIdentifier](globalState, payload);
-    globalState = { ...globalState, ...newState };
-
+  // we'r not interesting in updating the component scoped state given by useReducer,
+  // so we don't return anything. We have a reserved action called 'UPDATE_STATE'
+  if (action.type !== 'UPDATE_STATE') {
     for (const listener of listeners) {
-      listener(globalState);
-    }
-  };
+      listener({type: 'UPDATE_STATE'})
+     };
+  } 
+
+  return {...globalState};
+}
+
+
+export const useStore = () => {
+  //let's keep state from the hook and global state in sync
+  // when state changes, components are re-rendered
+
+  const [state, dispatch] = useReducer(globalReducer, globalState);
 
   useEffect(() => {
-    listeners.push(setState);
-
+    // subscribe component on componentDidMount
+    listeners.push(dispatch);
+    // unsubscribe component when destroyed
     return () => {
-      listeners = listeners.filter(li => li !== setState);
+      console.log('component has been unsubscribed');
+      listeners = listeners.filter(li => li !== dispatch);
     };
-  }, [setState]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
-  return [globalState, dispatch];
+  return [state, dispatch];
 };
 
 export const initStore = (userActions, initialState) => {
@@ -35,3 +52,10 @@ export const initStore = (userActions, initialState) => {
   }
   actions = { ...actions, ...userActions };
 };
+
+
+
+
+
+
+
