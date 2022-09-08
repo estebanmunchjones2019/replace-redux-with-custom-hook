@@ -12,10 +12,10 @@ export const useStore = () => {
   const setState = useState(globalState)[1];
 
   const dispatch = async (actionIdentifier, payload) => {
-    debugger;
     if (sideEffects[actionIdentifier]) {
-      await sideEffects[actionIdentifier](globalState, dispatch, payload);
+      const intermediateState = await sideEffects[actionIdentifier](globalState, dispatch, payload);
     }
+
     const newState = actions[actionIdentifier] ? 
       actions[actionIdentifier](globalState, dispatch, payload) : 
       { ...globalState };

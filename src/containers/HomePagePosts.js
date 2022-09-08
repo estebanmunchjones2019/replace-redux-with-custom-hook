@@ -16,14 +16,14 @@ const Posts = () => {
     //   // and if it works wihtout it.
     // }, []);
 
-    const [globalState, dispatch] = useStore();
+    const globalState = useStore()[0];
 
-    useEffect(() => {
-        dispatch('FETCH_POSTS');
-    },[])
+    // useEffect(() => {
+    //     dispatch('FETCH_POSTS');
+    // },[])
 
   // then apiData is used in the template
-  const posts = globalState.posts.slice(0,9).map(item => {   
+  const postsJSX = globalState.posts.slice(0,9).map(item => {   
     return (
             <li>
                 <h3>{item.title}</h3>
@@ -37,7 +37,7 @@ const Posts = () => {
       <>
         <h2>Posts component</h2>
         <ul>
-          {posts}
+          {postsJSX}
         </ul>
       </>
       
@@ -58,14 +58,14 @@ const Widget = () => {
     //   // and if it works wihtout it.
     // }, []);
 
-    const [globalState, dispatch] = useStore();
+    const globalState = useStore()[0];
 
-    useEffect(() => {
-        dispatch('FETCH_POSTS');
-    },[])
+    // useEffect(() => {
+    //     dispatch('FETCH_POSTS');
+    // },[])
 
   // then apiData is used in the template to show only 3 posts
-  const posts = globalState.posts.slice(0,2).map(item => {   
+  const postsJSX = globalState.posts.slice(0,2).map(item => {   
     return (
         <li>
             <h3>{item.title}</h3>
@@ -77,7 +77,7 @@ const Widget = () => {
       <>
         <h2>Widget component</h2>
         <ul>
-            {posts}
+            {postsJSX}
         </ul>
       </>  
   );
@@ -85,11 +85,17 @@ const Widget = () => {
 
 
 
-const HomePagePosts = () => (
-    <>
+const HomePagePosts = () => {
+  const dispatch = useStore()[1];
+
+  useEffect(() => {
+    dispatch('FETCH_POSTS');
+  },[])
+
+    return (<>
         <Posts/>
         <Widget />
-    </>
-);
+    </>);
+}
 
 export default HomePagePosts;
