@@ -6,7 +6,7 @@ import './ProductItem.css';
 
 const ProductItem = props => {
 
-  // we're just interested in dispatching and action, not in reading the state 
+  // we're just interested in dispatching an action, not in reading the state 
   const dispatch = useStore()[1];
 
   const toggleFavHandler = () => {
