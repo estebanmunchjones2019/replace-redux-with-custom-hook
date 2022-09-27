@@ -12,16 +12,19 @@ export const useStore = () => {
   const setState = useState(globalState)[1];
 
   const dispatch = async (actionIdentifier, payload) => {
+    console.log(`${actionIdentifier} action has been dispatched for ${payload.productId} product`);
+
     if (sideEffects[actionIdentifier]) {
       await sideEffects[actionIdentifier](globalState, dispatch, payload);
     }
+
     const newState = actions[actionIdentifier] ? 
       actions[actionIdentifier](globalState, dispatch, payload) : 
       { ...globalState };
   
     globalState = { ...globalState, ...newState };
 
-    console.log(`after running action: ${actionIdentifier} action for ${payload} product`,  'the updated globalState is: ', globalState );
+    console.log(`${actionIdentifier} action for ${payload.productId} product finished running`,  'the updated globalState is: ', globalState );
 
     for (const listener of listeners) {
       listener(globalState)
